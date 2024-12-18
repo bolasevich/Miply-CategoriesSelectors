@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+ * Copyright © 2016 Miply Patryk Makowski. All rights reserved.
+ *
+ * See LICENSE.txt for license details.
+ *
+ * @copyright   Copyright (c) 2016 Miply Patryk Makowski
+ * @author      Miply Patryk Makowski <magento@miply.no>
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Miply_Categories::css/selector-box.css"/>
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <block class="\Miply\CategoriesSelectors\Block\Selectors" name="miply_categoriesselector.selectors" template="Miply_CategoriesSelectors::selectors.phtml" />
+        </referenceContainer>
+    </body>
+</page>

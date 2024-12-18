@@ -1,0 +1,26 @@
+<?php /** @var \Magento\Framework\View\Element\Template $block */ ?>
+<script type="text/javascript">
+    function mpnSelected(){
+        const mpnValue = document.getElementById('mpn').value;
+        top.location.href = "<?php echo $this->getBaseUrl() ?>" + "catalogsearch/advanced/result/?name=&description=&short_description=&sku=&price%5Bfrom%5D=&price%5Bto%5D=&mpn=" + mpnValue;
+    }
+</script>
+
+<div class="mpn-search">
+    <label class="mpn-search__label" for="mpn">MPN</label>
+    <div class="mpn-search__field" id="mpndiv" >
+        <input class="input-text" type="text" name="mpn" id="mpn" placeholder="SEARCH BY MANUFACTURER PART NUMBER" />
+    </div>
+    <div class="buttons-set" id ="buttons-new"  align="right">
+        <button type="button" id="btnMpn" onClick="mpnSelected()" title="<?php echo __('Search') ?>" class="mpn-search__button">
+            <span><span><?php echo __('Search') ?></span></span>
+        </button>
+        <script type="text/javascript">
+            document.querySelector('#mpn').addEventListener('keyup', event => {
+                if (event.keyCode == 13){
+                    jQuery('#btnMpn').click();
+                }
+            });
+        </script>
+    </div>
+</div>

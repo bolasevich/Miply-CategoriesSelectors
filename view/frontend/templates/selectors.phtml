@@ -1,0 +1,136 @@
+<!--
+/**
+ * Copyright © 2018 Miply Patryk Makowski. All rights reserved.
+ *
+ * See LICENSE.txt for license details.
+ *
+ * @copyright   Copyright (c) 2016 Patryk Makowski
+ * @author      Patryk Makowski <magento at makowski . no>
+ */
+-->
+
+<?php
+/** @var \Miply\CategoriesSelectors\Block\Selectors $block */
+
+/** @var string $cssClassCommon */
+$cssClassCommon         = 'miply-categories-selector';
+/** @var string $elementsIdPrefix */
+$elementsIdPrefix       = 'miply-categories-selector_';
+/** @var string $dropDownIdPrefix */
+$dropDownIdPrefix       = $elementsIdPrefix . 'drop_';
+/** @var string $dropDownIdPrefix */
+$searchButtonId         = $elementsIdPrefix . 'button';
+/** @var string $dropDownIdPrefix */
+$searchFormId           = $elementsIdPrefix . 'form';
+
+/** @var int $categoriesLevelsCount */
+$categoriesLevelsCount  = $block->getCategoriesLevelsCount();
+?>
+
+
+<form action="<?php echo $block->getSearchUrl() ?>" method="post" id="<?php echo $searchFormId ?>" 
+      enctype="multipart/form-data" class="<?php echo $cssClassCommon ?> form">
+    <?php echo $block->getBlockHtml('formkey')?>
+	
+    <h2 class="select-vehicle">SELECT VEHICLE</h2>
+    
+    <select id="<?php echo $dropDownIdPrefix ?>0" name="category[0]" class="<?php echo $cssClassCommon ?> select">
+        <option value="-1"><?php echo __($block->getDropDownDefaultText()); ?></option>
+        <?php foreach ($block->getCategoryChildren() as $categoryId => $category): ?>
+            <option value="<?php echo $categoryId ?>"><?php echo $category->getName() ?></option>
+        <?php endforeach; ?>
+    </select>
+    
+    <?php for ($level = 1; $level < $categoriesLevelsCount; $level++): ?>
+        <select id="<?php echo $dropDownIdPrefix . $level ?>" 
+                name="category[<?php echo $level ?>]" 
+                disabled="disabled" 
+                class="<?php echo $cssClassCommon ?> select">
+            <option value="-1"><?php echo __($block->getDropDownDefaultText($level)); ?></option>
+        </select>
+    <?php endfor; ?>
+
+    <button type="submit" class="<?php echo $cssClassCommon ?> button" id="<?php echo $searchButtonId ?>" disabled="disabled">
+        <span>
+            <span><?php echo __('Search') ?></span>
+        </span>
+    </button>
+</form>
+
+<div style="clear:both;height:10px;width:100%">&nbsp;</div>
+
+<script type="text/javascript">
+    require([
+        'jquery',
+        'domReady!'
+    ], function (jQuery) {
+        'use strict';
+
+    <?php for ($level = 0; $level < $categoriesLevelsCount; $level++): ?>
+        jQuery("#<?php echo $dropDownIdPrefix . $level ?>").change(function() {
+            var value = jQuery('#<?php echo $dropDownIdPrefix . $level ?>').val();
+
+            <?php if ($level == $categoriesLevelsCount -1): ?>
+                /* enable button */
+                //jQuery('#<?php echo $searchButtonId ?>').removeAttr("disabled");
+            <?php else: ?>
+                /* populate following drop-down */
+                jQuery.ajax({
+                    url: "<?php echo $block->getUrl('miply_categoriesselector/ajax/categories') ?>",
+                    type: "POST",
+                    dataType: 'json',
+                    data: { 'parent_id': parseInt(jQuery(this).val()), 'level': <?php echo $level + 1 ?>},
+                    beforeSend: function() {
+                        /* hide following drop-downs */
+                        <?php for ($hideLevel = $level + 1; $hideLevel < $categoriesLevelsCount; $hideLevel++): ?>
+                            var element = jQuery("#<?php echo $dropDownIdPrefix . $hideLevel ?>");
+    
+                            element.empty().attr("disabled", "disabled");
+    
+                            /* add "Select" prompt */
+                            element.append(
+                                jQuery("<option></option>")
+                                    .attr("value", '-1')
+                                    .text("<?php echo __($block->getDropDownDefaultText($hideLevel)); ?>")
+                            );
+                        <?php endfor; ?>
+                        
+                        /* disable search button */
+                        jQuery('#<?php echo $searchButtonId ?>').attr("disabled", "disabled");
+                    },
+                    success: function(json) {                
+                        var element = jQuery("#<?php echo $dropDownIdPrefix . ($level + 1) ?>");
+                        
+                        /* populate drop-down with categories */
+                        var visible = false;
+                        jQuery.each(json, function(value, label) {
+                            element.append(
+                                jQuery("<option></option>")
+                                    .attr(
+                                        "value", 
+                                        value.replace('<?php echo $block->getJsonKeyOrderPrefix() ?>','')
+                                    )
+                                    .text(label)
+                            );
+                            visible = true;
+                        });
+                        
+                        /* make element visible if it contain any records */
+                        if (visible) {
+                            element.removeAttr("disabled");
+                        }
+
+                        var firstElement = jQuery("#<?php echo $dropDownIdPrefix . 0 ?>");
+                        if (firstElement.val() > 0) {
+                            jQuery('#<?php echo $searchButtonId ?>').removeAttr("disabled");
+                        }
+                    },
+                    error: function(error) {
+                        alert('En error occurred. Please try again.');   
+                    }
+                });
+            <?php endif; ?>
+        });
+    <?php endfor; ?>
+    });
+</script> 

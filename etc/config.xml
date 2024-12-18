@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <miply_categories_selector>
+            <category>
+                <sort_order>
+                    <level_2>DESC</level_2>
+                </sort_order>
+            </category>
+        </miply_categories_selector>
+    </default>
+</config>

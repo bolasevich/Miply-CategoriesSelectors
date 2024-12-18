@@ -1,0 +1,26 @@
+{
+    "name": "miply/module-categories-selectors",
+    "license": "OSL-3.0",
+    "type": "magento2-module",
+    "description": "",
+    "require": {
+        "magento-hackathon/magento-composer-installer": "*"
+    },
+    "authors":[
+        {
+            "name":"Miply Patryk Makowski",
+            "email":"magento@miply.no"
+        }
+    ],
+    "require": {
+        "magento/framework": "~100.0 || ~101.0"
+    },
+    "autoload": {
+        "files": [
+            "src/registration.php"
+        ],
+        "psr-4": {
+            "Miply\\CategoriesSelectors\\": "src/"
+        }
+    }
+}

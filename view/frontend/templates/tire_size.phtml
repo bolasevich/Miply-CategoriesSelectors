@@ -1,0 +1,26 @@
+<?php /** @var \Magento\Framework\View\Element\Template $block */ ?>
+<script type="text/javascript">
+    function tire_sizeSelected(){
+        const tire_sizeValue = document.getElementById('tire_size').value;
+        top.location.href = "<?php echo $this->getBaseUrl() ?>" + "catalogsearch/advanced/result/?name=&description=&short_description=&sku=&price%5Bfrom%5D=&price%5Bto%5D=&tire_size=" + tire_sizeValue;
+    }
+</script>
+
+<div class="mpn-search">
+    <label class="mpn-search__label" for="tire_size">Tire Size (Example: 2353515)</label>
+    <div class="mpn-search__field" id="mpndiv" >
+        <input class="input-text" type="text" name="tire_size" id="tire_size" />
+    </div>
+    <div class="buttons-set" id ="buttons-new"  align="right">
+        <button type="button" id="btn-tire-size" onClick="tire_sizeSelected()" title="<?php echo __('Search') ?>" class="mpn-search__button">
+            <span><span><?php echo __('Search') ?></span></span>
+        </button>
+        <script type="text/javascript">
+            document.querySelector('#tire_size').addEventListener('keyup', event => {
+                if (event.keyCode == 13){
+                    jQuery('#btn-tire-size').click();
+                }
+            });
+        </script>
+    </div>
+</div>

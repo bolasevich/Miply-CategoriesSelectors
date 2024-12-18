@@ -1,0 +1,26 @@
+<?php /** @var \Magento\Framework\View\Element\Template $block */ ?>
+<script type="text/javascript">
+    function hollanderSelected(){
+        const hollanderValue = document.getElementById('hollander').value;
+        top.location.href = "<?php echo $this->getBaseUrl() ?>" + "catalogsearch/advanced/result/?name=&description=&short_description=&sku=&price%5Bfrom%5D=&price%5Bto%5D=&hollander=" + hollanderValue;
+    }
+</script>
+
+<div class="hollander-number">
+    <label class="hollander-number__label" for="hollander">Part Number</label>
+    <div class="hollander-number__field" id="hollanderdiv">
+        <input class="input-text" type="text" name="hollander" id="hollander" placeholder="SEARCH BY HOLLANDER NUMBER" />
+    </div>
+    <div class="buttons-set" id ="buttons-new"  align="right">
+        <button type="button" onClick="hollanderSelected()" id="btnHollander" title="<?php echo __('Search') ?>" class="hollander-number__button">
+            <span><span><?php echo __('Search') ?></span></span>
+        </button>
+        <script type="text/javascript">
+            document.querySelector('#hollander').addEventListener('keyup', event => {
+                if (event.keyCode == 13) {
+                    jQuery('#btnHollander').click();
+                }
+            });
+        </script>
+    </div>
+</div>
